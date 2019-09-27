@@ -8,7 +8,18 @@ import threading
 import concurrent
 
 oot_channel_id_list = [
-    "586841658092421121"
+    "595635734904307742", #trivia fire 2.0 loco
+	"620842231229841421", #galaxy loco
+    "626992737018970112", #galaxy loco confetti
+    "626458458064945164", #study iq loco 
+	"620140094476517396", #ukt loco
+	"569420128794443776", #unt loco
+	"523359669280833536", #tgl hq
+	"459842150323060736", #tdimension hq
+	"580198028950896640", #ttribe hq
+    "599522378736861194",
+    "557047819832393739"
+
 ]
 
 # getting number of answers
