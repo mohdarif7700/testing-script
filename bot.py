@@ -16,11 +16,18 @@ BOT_OWNER_ROLE = 'RUNNER' # change to what you need
  
 oot_channel_id_list = [
     "606130408018542633", #tf 2.0 flipkart
-    "620842233867796480", #galaxy
-	"626992801858453511", #galaxy
-	"620140097140031523", #ukt
-	"611940220350234686", #unt
-	"620513796343201812"  #study iq
+    "620842233867796480", #galaxy flipkart
+	"626992801858453511", #galaxy flipkart
+	"620140097140031523", #ukt flipkart
+	"611940220350234686", #unt flipkart
+	"620513796343201812", #study iq flipkart
+	"605443517069656084", #tf 2.0 confetti
+	"626769223846461470", #galaxy confetti
+	"626992737018970112", #galaxy confetti
+	"620471823787622420", #study iq confetti
+	"588070986554015764", #unt confetti
+	"620140099346104325" #ukt confetti
+	
 	
 
 ]
