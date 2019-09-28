@@ -200,9 +200,9 @@ class Bot(discord.Client):
 #             if answer == 4:
 #                 four_check = "question: "
  
-        self.embed.set_field_at(0, name="**__Option 1__**", value="**``{0}``**{1}".format( one_check))
-        self.embed.set_field_at(1, name="**__Option 2__**", value="**``{0}``**{1}".format( two_check))
-        self.embed.set_field_at(2, name="**__Option 3__**", value="**``{0}``**{1}".format( three_check))
+        self.embed.set_field_at(0, name=title, value=one_check, inline=False)
+        self.embed.set_field_at(0, name=title, value=two_check, inline=False)
+        self.embed.set_field_at(0, name=title, value=three_check, inline=False)
         #self.embed.set_field_at(3, name="**__Option 4__**", value="**``{0}``**{1}".format(lst_scores[3], four_check))
 
         if self.embed_msg is not None:
