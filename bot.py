@@ -15,15 +15,13 @@ BOT_OWNER_ROLE = 'RUNNER' # change to what you need
 
  
 oot_channel_id_list = [
-    "595635734904307742", #trivia fire 2.0 loco
-	"620842231229841421", #galaxy loco
-    "626992737018970112", #galaxy loco confetti
-    "626458458064945164", #study iq loco 
-	"620140094476517396", #ukt loco
-	"569420128794443776", #unt loco
-	"523359669280833536", #tgl hq
-	"459842150323060736", #tdimension hq
-	"580198028950896640" #ttribe hq
+    "606130408018542633", #tf 2.0 flipkart
+    "620842233867796480", #galaxy
+	"626992801858453511", #galaxy
+	"620140097140031523", #ukt
+	"611940220350234686", #unt
+	"620513796343201812"  #study iq
+	
 
 ]
 
@@ -133,12 +131,13 @@ class Bot(discord.Client):
 
         # embed creation
         self.embed=discord.Embed(title="**Google Search**", description="**__DEEP SEARCHING FOR RESULTS....__**")
-        self.embed.add_field(name="**__Option 1__**", value='\u200b', inline=False)
-        self.embed.add_field(name="**__Option 2__**", value='\u200b', inline=False)
-        self.embed.add_field(name="**__Option 3__**", value='\u200b', inline=False)
+        self.embed.add_field(name="**__Option 1__**", value="0", inline=False)
+        self.embed.add_field(name="**__Option 2__**", value="0", inline=False)
+        self.embed.add_field(name="**__Option 3__**", value="0", inline=False)
+        
         #self.embed.add_field(name="**__Option 4__**", value="0", inline=False)
-        #self.embed.set_footer(text=f"Developed By: MATRICKS GAMING ", \
-           # icon_url="")
+        self.embed.set_footer(text=f"Developed By: MATRICKS GAMING ", \
+            icon_url="")
         
 
 
@@ -200,9 +199,9 @@ class Bot(discord.Client):
 #             if answer == 4:
 #                 four_check = "question: "
  
-        self.embed.set_field_at(0, name="**__Option 1__**", value=one_check, inline=False)
-        self.embed.set_field_at(0, name="**__Option 2__**", value=two_check, inline=False)
-        self.embed.set_field_at(0, name="**__Option 3__**", value=three_check, inline=False)
+        self.embed.set_field_at(0, name="**__Option 1__**",value="**``{0}``**{1}".format(lst_scores[0], one_check))
+        self.embed.set_field_at(1, name="**__Option 2__**", value="**``{0}``**{1}".format(lst_scores[1], two_check))
+        self.embed.set_field_at(2, name="**__Option 3__**", value="**``{0}``**{1}".format(lst_scores[2], three_check))
         #self.embed.set_field_at(3, name="**__Option 4__**", value="**``{0}``**{1}".format(lst_scores[3], four_check))
 
         if self.embed_msg is not None:
