@@ -138,7 +138,7 @@ class Bot(discord.Client):
         self.embed.add_field(name="**__Option 3__**", value=three_check, inline=False)
         #self.embed.add_field(name="**__Option 4__**", value="0", inline=False)
         #self.embed.set_footer(text=f"Developed By: MATRICKS GAMING ", \
-            icon_url="")
+           # icon_url="")
         
 
 
