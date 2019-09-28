@@ -1,12 +1,19 @@
+'''
+using discord.py version 1.0.0a
+'''
 import discord
 import asyncio
 import re
-import sys
-import time
 import multiprocessing
 import threading
 import concurrent
 
+BOT_OWNER_ROLE = 'RUNNER' # change to what you need
+#BOT_OWNER_ROLE_ID = "554283064822333441"
+ 
+ 
+
+ 
 oot_channel_id_list = [
     "595635734904307742", #trivia fire 2.0 loco
 	"620842231229841421", #galaxy loco
@@ -16,26 +23,16 @@ oot_channel_id_list = [
 	"569420128794443776", #unt loco
 	"523359669280833536", #tgl hq
 	"459842150323060736", #tdimension hq
-	"580198028950896640", #ttribe hq
-    "599522378736861194",
-    "557047819832393739"
+	"580198028950896640" #ttribe hq
 
 ]
 
-# getting number of answers
-try:
-    N = int(sys.argv[1])
-except:
-    N = 3
 
-answer_pattern = \
-    re.compile(r'(not|n)?([1-{0}]{{1}})(\?)?(apg)?(\?)?$'.format(N),
-               re.IGNORECASE)
+answer_pattern = re.compile(r'(not|n)?([1-4]{1})(\?)?(cnf)?(\?)?$', re.IGNORECASE)
 
-apgscore = 1000
-nomarkscore = 20
-markscore = 10
-
+apgscore = 80
+nomarkscore = 60
+markscore = 30
 
 async def update_scores(content, answer_scores):
     global answer_pattern
@@ -44,29 +41,28 @@ async def update_scores(content, answer_scores):
     if m is None:
         return False
 
-    ind = int(m[2]) - 1
+    ind = int(m[2])-1
 
     if m[1] is None:
         if m[3] is None:
             if m[4] is None:
                 answer_scores[ind] += nomarkscore
-            else:  # apg
+            else: # apg
                 if m[5] is None:
                     answer_scores[ind] += apgscore
                 else:
                     answer_scores[ind] += markscore
 
-        else:  # 1? ...
+        else: # 1? ...
             answer_scores[ind] += markscore
 
-    else:  # contains not or n
+    else: # contains not or n
         if m[3] is None:
             answer_scores[ind] -= nomarkscore
         else:
             answer_scores[ind] -= markscore
 
     return True
-
 
 class SelfBot(discord.Client):
 
@@ -79,14 +75,19 @@ class SelfBot(discord.Client):
 
     async def on_ready(self):
         print("======================")
-        print("Nelson Trivia Self Bot")
+       
         print("Connected to discord.")
         print("User: " + self.user.name)
         print("ID: " + str(self.user.id))
 
+    # @bot.event
+    # async def on_message(message):
+    #    if message.content.startswith('-debug'):
+    #         await message.channel.send('d')
+
         def is_scores_updated(message):
             if message.guild == None or \
-                    str(message.channel.id) not in self.oot_channel_id_list:
+                str(message.channel.id) not in self.oot_channel_id_list:
                 return False
 
             content = message.content.replace(' ', '').replace("'", "")
@@ -94,22 +95,22 @@ class SelfBot(discord.Client):
             if m is None:
                 return False
 
-            ind = int(m[2]) - 1
+            ind = int(m[2])-1
 
             if m[1] is None:
                 if m[3] is None:
                     if m[4] is None:
                         self.answer_scores[ind] += nomarkscore
-                    else:  # apg
+                    else: # apg
                         if m[5] is None:
                             self.answer_scores[ind] += apgscore
                         else:
                             self.answer_scores[ind] += markscore
 
-                else:  # 1? ...
+                else: # 1? ...
                     self.answer_scores[ind] += markscore
 
-            else:  # contains not or n
+            else: # contains not or n
                 if m[3] is None:
                     self.answer_scores[ind] -= nomarkscore
                 else:
@@ -121,11 +122,9 @@ class SelfBot(discord.Client):
             await self.wait_for('message', check=is_scores_updated)
             self.update_event.set()
 
-
 class Bot(discord.Client):
 
     def __init__(self, answer_scores):
-        global N
         super().__init__()
         self.bot_channel_id_list = []
         self.embed_msg = None
@@ -133,66 +132,120 @@ class Bot(discord.Client):
         self.answer_scores = answer_scores
 
         # embed creation
-        self.embed = discord.Embed(title="MADE BY nhocsuhot ", description="**Connecting .**", color=0x000440)
-        for fnum in range(N):
-            self.embed.add_field(name=chr(65 + fnum), value="0", inline=False)
-            self.embed.set_footer(text=f"© MADE BY .",
-                                  icon_url="")
+        self.embed=discord.Embed(title="**Google Search**", description="**__DEEP SEARCHING FOR RESULTS....__**")
+        self.embed.add_field(name="**__Option 1__**", value="0", inline=False)
+        self.embed.add_field(name="**__Option 2__**", value="0", inline=False)
+        self.embed.add_field(name="**__Option 3__**", value="0", inline=False)
+        #self.embed.add_field(name="**__Option 4__**", value="0", inline=False)
+        self.embed.set_footer(text=f"Developed By: MATRICKS GAMING ", \
+            icon_url="")
+        
+
 
     async def clear_results(self):
         for i in range(len(self.answer_scores)):
-            self.answer_scores[i] = 0
+            self.answer_scores[i]=0
 
     async def update_embeds(self):
-        global N
-        check = [''] * N
+
+         
+
+        one_check = ""
+        two_check = ""
+        three_check = ""
+        four_check = ""
+        
 
         lst_scores = list(self.answer_scores)
 
         highest = max(lst_scores)
-        lowest = min(lst_scores)
-        answer = lst_scores.index(highest)
+#         lowest = min(lst_scores)
+        answer = lst_scores.index(highest)+1
+        best=":mag:"
+         
 
-        if lst_scores.count(highest) < N:
-            check[lst_scores.index(highest)] = ":white_check_mark:"
-            check[lst_scores.index(lowest)] = ":x:"
-
-        for fnum in range(N):
-            self.embed.set_field_at(fnum, name=chr(65 + fnum),
-                                    value="{0}{1}".format(lst_scores[fnum], check[fnum]))
+        if highest > 0:
+            if answer == 1:
+                one_check = ":one::white_check_mark:"
+            else:
+                one_check=":x:"
+            if answer ==1:
+                best=":one::white_check_mark: "
+            if answer == 2:
+                two_check = ":two::white_check_mark:"
+            else:
+                two_check= ":x:"
+            if answer == 2:
+                best=":two::white_check_mark: "
+            if answer == 3:
+                three_check = ":three::white_check_mark:"
+            else:
+                three_check= ":x:"
+            if answer == 3:
+                best=":three::white_check_mark: "
+            if answer == 4:
+              four_check = ":four::white_check_mark:"
+            else:
+                four_check=":x:"
+            if answer == 4:
+                best=":four::white_check_mark: "
+                
+#         if lowest < 0:
+#             if answer == 1:
+#                 one_check = ":question: "
+#             if answer == 2:
+#                 two_check = ":question: "
+#             if answer == 3:
+#                 three_check = ":question: "
+#             if answer == 4:
+#                 four_check = "question: "
+ 
+        self.embed.set_field_at(0, name="**__Option 1__**", value="**``{0}``**{1}".format(lst_scores[0], one_check))
+        self.embed.set_field_at(1, name="**__Option 2__**", value="**``{0}``**{1}".format(lst_scores[1], two_check))
+        self.embed.set_field_at(2, name="**__Option 3__**", value="**``{0}``**{1}".format(lst_scores[2], three_check))
+        #self.embed.set_field_at(3, name="**__Option 4__**", value="**``{0}``**{1}".format(lst_scores[3], four_check))
 
         if self.embed_msg is not None:
             await self.embed_msg.edit(embed=self.embed)
+            
 
     async def on_ready(self):
         print("==============")
-        print("Nelson Trivia")
+        
         print("Connected to discord.")
         print("User: " + self.user.name)
         print("ID: " + str(self.user.id))
+
         await self.clear_results()
         await self.update_embeds()
-        await self.change_presence(activity=discord.Game(name=''))
-
-    async def send_embed(self, channel, embed):
-        return await channel.send('', embed=embed)
-
-    async def edit_embed(self, old_embed, new_embed):
-        return await old_embed.edit(embed=new_embed)
+        
+        await self.change_presence(activity=discord.Game(name='with MATricks'))
 
     async def on_message(self, message):
 
         # if message is private
         if message.author == self.user or message.guild == None:
             return
-        if message.content.lower() == "":
-            self.embed_msg = None
-            await self.clear_results()
-            await self.update_embeds()
-            self.embed_msg = \
-                await self.send_embed(message.channel, self.embed)
-            self.embed_channel_id = message.channel.id
+
+        if message.content.lower() == "+":
+            await message.delete()
+            if BOT_OWNER_ROLE in [role.name for role in message.author.roles]:
+                self.embed_msg = None
+                await self.clear_results()
+                await self.update_embeds()
+                self.embed_msg = \
+                    await message.channel.send('',embed=self.embed)
+                self.embed_channel_id = message.channel.id
+            else:
+                await message.channel.send("**You Not Have permission To Use This cmd!**")
             return
+
+        if message.content.startswith('game'):
+          if BOT_OWNER_ROLE in [role.name for role in message.author.roles]:
+           embed = discord.Embed(title="Help Commands", description="**How Run Bot**", color=0x00ff00)
+           embed.add_field(name="Supported Game", value="**Loco\nBrainbaazi\nPollbaazi\nSwag-iq\nThe-Q\nConfett-India\nCash-Quiz-Live\nHQ Tivia\n\nJeetoh Answer For `+`**", inline=False)
+           embed.add_field(name="when Question come put command", value="** `+` is command work for support game**", inline=False)
+           await message.channel.send(embed=embed)
 
         # process votes
         if message.channel.id == self.embed_channel_id:
@@ -201,17 +254,16 @@ class Bot(discord.Client):
             if updated:
                 await self.update_embeds()
 
-
 def bot_with_cyclic_update_process(update_event, answer_scores):
+
     def cyclic_update(bot, update_event):
         f = asyncio.run_coroutine_threadsafe(bot.update_embeds(), bot.loop)
         while True:
             update_event.wait()
             update_event.clear()
             f.cancel()
-            time.sleep(0.2)
             f = asyncio.run_coroutine_threadsafe(bot.update_embeds(), bot.loop)
-            # res = f.result()
+            #res = f.result()
 
     bot = Bot(answer_scores)
 
@@ -224,6 +276,7 @@ def bot_with_cyclic_update_process(update_event, answer_scores):
 
 
 def selfbot_process(update_event, answer_scores):
+
     selfbot = SelfBot(update_event, answer_scores)
 
     loop = asyncio.get_event_loop()
@@ -231,15 +284,15 @@ def selfbot_process(update_event, answer_scores):
                                    bot=False))
     loop.run_forever()
 
-
 if __name__ == '__main__':
+
     # running bot and selfbot in separate OS processes
 
     # shared event for embed update
     update_event = multiprocessing.Event()
 
     # shared array with answer results
-    answer_scores = multiprocessing.Array(typecode_or_type='i', size_or_initializer=N)
+    answer_scores = multiprocessing.Array(typecode_or_type='i', size_or_initializer=4)
 
     p_bot = multiprocessing.Process(target=bot_with_cyclic_update_process, args=(update_event, answer_scores))
     p_selfbot = multiprocessing.Process(target=selfbot_process, args=(update_event, answer_scores))
