@@ -133,9 +133,9 @@ class Bot(discord.Client):
 
         # embed creation
         self.embed=discord.Embed(title="**Google Search**", description="**__DEEP SEARCHING FOR RESULTS....__**")
-        self.embed.add_field(name="**__Option 1__**", value=one_check, inline=False)
-        self.embed.add_field(name="**__Option 2__**", value=two_check, inline=False)
-        self.embed.add_field(name="**__Option 3__**", value=three_check, inline=False)
+        self.embed.add_field(name="**__Option 1__**", value='\u200b', inline=False)
+        self.embed.add_field(name="**__Option 2__**", value='\u200b', inline=False)
+        self.embed.add_field(name="**__Option 3__**", value='\u200b', inline=False)
         #self.embed.add_field(name="**__Option 4__**", value="0", inline=False)
         #self.embed.set_footer(text=f"Developed By: MATRICKS GAMING ", \
            # icon_url="")
